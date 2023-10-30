@@ -2,6 +2,7 @@ import colorama
 import time
 import re
 import os
+import json
 
 def auto_mkdir(*paths: str) -> None:
     for path in paths:
@@ -82,5 +83,4 @@ def split_str_to_list(text: str, size: int) -> list:
     print_detail(memo='INFO', obj=f'Form list: "{text_list}"')
 
     return text_list
-
 
