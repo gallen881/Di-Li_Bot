@@ -1,10 +1,11 @@
 import json
 import asyncio
+from io import BytesIO
 import discord
 from discord.ext import commands
 
 from core._cog import Cog_Extension
-from utils.Ltools import get_group_summary, get_user_profile
+from utils.Ltools import get_group_summary, get_user_profile, get_message_file
 
 
 with open('config.json', 'r') as file:
@@ -32,6 +33,11 @@ class FromLine(Cog_Extension):
                     with open('data.json', 'w') as file:
                         json.dump(data, file, indent=4)
                     await self.welcome_joining(switcher['join'])
+                if data['last_timestamp']['file'] != switcher['file']['timestamp']:
+                    data['last_timestamp']['file'] = switcher['file']['timestamp']
+                    with open('data.json', 'w') as file:
+                        json.dump(data, file, indent=4)
+                    await self.send_file(switcher['file'])
                     
                 await asyncio.sleep(1)
 
@@ -71,6 +77,22 @@ class FromLine(Cog_Extension):
             msg = f'**{user_profile["displayName"]}: **\n{sdata["text"]}'.replace('\n', '\n> ')
 
         await channel.send(msg)
+
+    async def send_file(self, sdata: dict):
+        user_profile = get_user_profile(sdata['userId'])
+        if sdata['groupId'] is None:
+            channel_id = data['user_table'][sdata['userId']]
+            channel = self.bot.get_channel(channel_id)
+            msg = ''
+        else:
+            channel_id = data['group_table'][sdata['groupId']]
+            channel = self.bot.get_channel(channel_id)
+            msg = f'**{user_profile["displayName"]}: **'
+        file = get_message_file(sdata['message_id'])
+        with BytesIO() as f:
+            f.write(file)
+            f.seek(0)
+            await channel.send(msg, file=discord.File(f, filename=sdata['file_name']))
 
     async def welcome_joining(self, sdata: dict):
         group_name = get_group_summary(sdata['groupId'])['groupName']
