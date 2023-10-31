@@ -16,10 +16,10 @@ def write_message_sdata(data: dict):
         'groupId': data['events'][0]['source'].get('groupId', None),
         'timestamp': data['events'][0]['timestamp']
     }
-    with open('switcher.json', 'r') as file:
+    with open('switcher.json', 'r', encoding='utf8') as file:
         switcher = json.load(file)
     switcher['message'] = switch_data
-    with open('switcher.json', 'w') as file:
+    with open('switcher.json', 'w', encoding='utf8') as file:
         json.dump(switcher, file, indent=4, ensure_ascii=False)
 
 def write_join_sdata(data: dict):
@@ -27,11 +27,11 @@ def write_join_sdata(data: dict):
         'groupId': data['events'][0]['source']['groupId'],
         'timestamp': data['events'][0]['timestamp']
     }
-    with open('switcher.json', 'r') as file:
+    with open('switcher.json', 'r', encoding='utf8') as file:
         switcher = json.load(file)
     switcher['join'] = switch_data
-    with open('switcher.json', 'w') as file:
-        json.dump(switcher, file, indent=4)
+    with open('switcher.json', 'w', encoding='utf8') as file:
+        json.dump(switcher, file, indent=4, ensure_ascii=False)
 
 def get_group_summary(group_id: str) -> dict:
     url = f'https://api.line.me/v2/bot/group/{group_id}/summary'

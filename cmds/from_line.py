@@ -20,7 +20,7 @@ class FromLine(Cog_Extension):
         async def checker():
             await self.bot.wait_until_ready()
             while not self.bot.is_closed():
-                with open('switcher.json', 'r') as file:
+                with open('switcher.json', 'r', encoding='utf8') as file:
                     switcher = json.load(file)
                 if data['last_timestamp']['message'] != switcher['message']['timestamp']:
                     data['last_timestamp']['message'] = switcher['message']['timestamp']
