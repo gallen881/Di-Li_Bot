@@ -1,12 +1,10 @@
 import json
-import asyncio
 import discord
 from discord.ext import commands
 from linebot import LineBotApi
 from linebot.models import TextSendMessage
 
 from core._cog import Cog_Extension
-from utils.Ltools import get_group_summary, get_user_profile
 
 
 with open('config.json', 'r') as file:
@@ -21,6 +19,8 @@ class FromDiscord(Cog_Extension):
     async def on_message(self, msg: discord.Message):
         if msg.author.bot:
             return
+        with open('data.json', 'r') as file:
+            data = json.load(file)
         if msg.channel.category.name == 'Users':
             user_id = list(data['user_table'].keys())[list(data['user_table'].values()).index(msg.channel.id)]
             line_bot_api.push_message(user_id, TextSendMessage(text=msg.content))
