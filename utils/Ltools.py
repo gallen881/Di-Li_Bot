@@ -50,6 +50,19 @@ def write_file_sdata(event: MessageEvent):
     with open('switcher.json', 'w', encoding='utf8') as file:
         json.dump(switcher, file, indent=4, ensure_ascii=False)
 
+def write_image_sdata(event: MessageEvent):
+    switch_data = {
+        'message_id': event.message.id,
+        'userId': event.source.user_id,
+        'groupId': event.source.group_id if event.source.type == 'group' else None,
+        'timestamp': event.timestamp
+    }
+    with open('switcher.json', 'r', encoding='utf8') as file:
+        switcher = json.load(file)
+    switcher['image'] = switch_data
+    with open('switcher.json', 'w', encoding='utf8') as file:
+        json.dump(switcher, file, indent=4, ensure_ascii=False)
+        
 def get_group_summary(group_id: str) -> dict:
     url = f'https://api.line.me/v2/bot/group/{group_id}/summary'
     r = requests.get(url, headers=headers).json()

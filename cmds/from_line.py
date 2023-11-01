@@ -37,7 +37,12 @@ class FromLine(Cog_Extension):
                     data['last_timestamp']['file'] = switcher['file']['timestamp']
                     with open('data.json', 'w') as file:
                         json.dump(data, file, indent=4)
-                    await self.send_file(switcher['file'])
+                    await self.send_file(switcher['file'], file_type='file')
+                if data['last_timestamp']['image'] != switcher['image']['timestamp']:
+                    data['last_timestamp']['image'] = switcher['image']['timestamp']
+                    with open('data.json', 'w') as file:
+                        json.dump(data, file, indent=4)
+                    await self.send_file(switcher['image'], file_type='image')
                     
                 await asyncio.sleep(1)
 
@@ -78,7 +83,7 @@ class FromLine(Cog_Extension):
 
         await channel.send(msg)
 
-    async def send_file(self, sdata: dict):
+    async def send_file(self, sdata: dict, file_type: str):
         user_profile = get_user_profile(sdata['userId'])
         if sdata['groupId'] is None:
             channel_id = data['user_table'][sdata['userId']]
@@ -92,7 +97,13 @@ class FromLine(Cog_Extension):
         with BytesIO() as f:
             f.write(file)
             f.seek(0)
-            await channel.send(msg, file=discord.File(f, filename=sdata['file_name']))
+            if file_type == 'file':   
+                await channel.send(msg, file=discord.File(f, filename=sdata['file_name']))
+            elif file_type == 'image':
+                await channel.send(msg, file=discord.File(f, filename='image.png'))
+
+    # async def send_image(self, sdata: dict):
+
 
     async def welcome_joining(self, sdata: dict):
         group_name = get_group_summary(sdata['groupId'])['groupName']
