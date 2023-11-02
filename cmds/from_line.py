@@ -21,28 +21,31 @@ class FromLine(Cog_Extension):
         async def checker():
             await self.bot.wait_until_ready()
             while not self.bot.is_closed():
-                with open('switcher.json', 'r', encoding='utf8') as file:
-                    switcher = json.load(file)
-                if data['last_timestamp']['message'] != switcher['message']['timestamp']:
-                    data['last_timestamp']['message'] = switcher['message']['timestamp']
-                    with open('data.json', 'w') as file:
-                        json.dump(data, file, indent=4)
-                    await self.send_text(switcher['message'])
-                if data['last_timestamp']['join'] != switcher['join']['timestamp']:
-                    data['last_timestamp']['join'] = switcher['join']['timestamp']
-                    with open('data.json', 'w') as file:
-                        json.dump(data, file, indent=4)
-                    await self.welcome_joining(switcher['join'])
-                if data['last_timestamp']['file'] != switcher['file']['timestamp']:
-                    data['last_timestamp']['file'] = switcher['file']['timestamp']
-                    with open('data.json', 'w') as file:
-                        json.dump(data, file, indent=4)
-                    await self.send_file(switcher['file'], file_type='file')
-                if data['last_timestamp']['image'] != switcher['image']['timestamp']:
-                    data['last_timestamp']['image'] = switcher['image']['timestamp']
-                    with open('data.json', 'w') as file:
-                        json.dump(data, file, indent=4)
-                    await self.send_file(switcher['image'], file_type='image')
+                try: 
+                    with open('switcher.json', 'r', encoding='utf8') as file:
+                        switcher = json.load(file)
+                    if data['last_timestamp']['message'] != switcher['message']['timestamp']:
+                        data['last_timestamp']['message'] = switcher['message']['timestamp']
+                        with open('data.json', 'w') as file:
+                            json.dump(data, file, indent=4)
+                        await self.send_text(switcher['message'])
+                    if data['last_timestamp']['join'] != switcher['join']['timestamp']:
+                        data['last_timestamp']['join'] = switcher['join']['timestamp']
+                        with open('data.json', 'w') as file:
+                            json.dump(data, file, indent=4)
+                        await self.welcome_joining(switcher['join'])
+                    if data['last_timestamp']['file'] != switcher['file']['timestamp']:
+                        data['last_timestamp']['file'] = switcher['file']['timestamp']
+                        with open('data.json', 'w') as file:
+                            json.dump(data, file, indent=4)
+                        await self.send_file(switcher['file'], file_type='file')
+                    if data['last_timestamp']['image'] != switcher['image']['timestamp']:
+                        data['last_timestamp']['image'] = switcher['image']['timestamp']
+                        with open('data.json', 'w') as file:
+                            json.dump(data, file, indent=4)
+                        await self.send_file(switcher['image'], file_type='image')
+                except Exception as e:
+                    print(e)
                     
                 await asyncio.sleep(1)
 
