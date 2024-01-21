@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 
 from core._cog import Cog_Extension
-from utils.Ltools import get_group_summary, get_user_profile, get_message_file
+from utils.Ltools import get_group_summary, get_user_profile, get_message_file, get_sticker_file
 
 
 with open('config.json', 'r') as file:
@@ -39,17 +39,39 @@ class FromLine(Cog_Extension):
                         with open('data.json', 'w') as file:
                             json.dump(data, file, indent=4)
                         await self.send_file(switcher['file'], file_type='file')
+                    if data['last_timestamp']['sticker'] != switcher['sticker']['timestamp']:
+                        data['last_timestamp']['sticker'] = switcher['sticker']['timestamp']
+                        with open('data.json', 'w') as file:
+                            json.dump(data, file, indent=4)
+                        await self.send_sticker(switcher['sticker'])
                     if data['last_timestamp']['image'] != switcher['image']['timestamp']:
                         data['last_timestamp']['image'] = switcher['image']['timestamp']
                         with open('data.json', 'w') as file:
                             json.dump(data, file, indent=4)
                         await self.send_file(switcher['image'], file_type='image')
+                    if data['last_timestamp']['video'] != switcher['video']['timestamp']:
+                        data['last_timestamp']['video'] = switcher['video']['timestamp']
+                        with open('data.json', 'w') as file:
+                            json.dump(data, file, indent=4)
+                        await self.send_file(switcher['video'], file_type='video')
                 except Exception as e:
                     print(e)
                     
                 await asyncio.sleep(1)
 
         self.bot.loop.create_task(checker())
+
+    def get_channelmsg(self, sd: dict):
+        if sd['groupId'] is None:
+            channel_id = data['user_table'][sd['userId']]
+            channel = self.bot.get_channel(channel_id)
+            msg = ''
+        else:
+            channel_id = data['group_table'][sd['groupId']]
+            channel = self.bot.get_channel(channel_id)
+            user_profile = get_user_profile(sd['userId'])
+            msg = f'**{user_profile["displayName"]}: **'
+        return channel, msg
 
     async def create_group_channel(self, sdata: dict) -> discord.TextChannel:
         group_summary = get_group_summary(sdata['groupId'])
@@ -87,7 +109,6 @@ class FromLine(Cog_Extension):
         await channel.send(msg)
 
     async def send_file(self, sdata: dict, file_type: str):
-        user_profile = get_user_profile(sdata['userId'])
         if sdata['groupId'] is None:
             channel_id = data['user_table'][sdata['userId']]
             channel = self.bot.get_channel(channel_id)
@@ -95,6 +116,7 @@ class FromLine(Cog_Extension):
         else:
             channel_id = data['group_table'][sdata['groupId']]
             channel = self.bot.get_channel(channel_id)
+            user_profile = get_user_profile(sdata['userId'])
             msg = f'**{user_profile["displayName"]}: **'
         file = get_message_file(sdata['message_id'])
         with BytesIO() as f:
@@ -104,8 +126,23 @@ class FromLine(Cog_Extension):
                 await channel.send(msg, file=discord.File(f, filename=sdata['file_name']))
             elif file_type == 'image':
                 await channel.send(msg, file=discord.File(f, filename='image.png'))
+            elif file_type == 'video':
+                await channel.send(msg, file=discord.File(f, filename='video.mp4'))
 
-    # async def send_image(self, sdata: dict):
+    async def send_sticker(self, sdata: dict):
+        channel, msg = self.get_channelmsg(sdata)
+        # sticker = json.loads(get_sticker_file(sdata['sticker_id'], sdata['type']))
+        sticker = get_sticker_file(sdata['sticker_id'], sdata['type'])
+        extension = 'gif' if sdata['type'] == 'ANIMATION' else 'png'
+        # with open(f'sticker.{extension}', 'wb') as file:
+        #     file.write(sticker)
+        with BytesIO() as f:
+            f.write(sticker)
+            f.seek(0)
+            f = discord.File(f, filename=f'sticker.{extension}')
+            embed = discord.Embed(title='Sticker').set_image(url=f'attachment://sticker.{extension}')
+            await channel.send(msg, file=f, embed=embed)
+        
 
 
     async def welcome_joining(self, sdata: dict):

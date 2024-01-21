@@ -35,6 +35,21 @@ def write_join_sdata(event: JoinEvent):
     with open('switcher.json', 'w', encoding='utf8') as file:
         json.dump(switcher, file, indent=4, ensure_ascii=False)
 
+def write_sticker_sdata(event: MessageEvent):
+    switch_data = {
+        'type': event.message.sticker_resource_type,
+        'package_id': event.message.package_id,
+        'sticker_id': event.message.sticker_id,
+        'userId': event.source.user_id,
+        'groupId': event.source.group_id if event.source.type == 'group' else None,
+        'timestamp': event.timestamp
+    }
+    with open('switcher.json', 'r', encoding='utf8') as file:
+        switcher = json.load(file)
+    switcher['sticker'] = switch_data
+    with open('switcher.json', 'w', encoding='utf8') as file:
+        json.dump(switcher, file, indent=4, ensure_ascii=False)
+
 def write_file_sdata(event: MessageEvent):
     switch_data = {
         'message_id': event.message.id,
@@ -47,6 +62,20 @@ def write_file_sdata(event: MessageEvent):
     with open('switcher.json', 'r', encoding='utf8') as file:
         switcher = json.load(file)
     switcher['file'] = switch_data
+    with open('switcher.json', 'w', encoding='utf8') as file:
+        json.dump(switcher, file, indent=4, ensure_ascii=False)
+
+def write_video_sdata(event: MessageEvent):
+    switch_data = {
+        'type': event.message.type,
+        'message_id': event.message.id,
+        'userId': event.source.user_id,
+        'groupId': event.source.group_id if event.source.type == 'group' else None,
+        'timestamp': event.timestamp
+    }
+    with open('switcher.json', 'r', encoding='utf8') as file:
+        switcher = json.load(file)
+    switcher['video'] = switch_data
     with open('switcher.json', 'w', encoding='utf8') as file:
         json.dump(switcher, file, indent=4, ensure_ascii=False)
 
@@ -76,4 +105,12 @@ def get_user_profile(user_id: str) -> dict:
 def get_message_file(message_id: str):
     url = f'https://api-data.line.me/v2/bot/message/{message_id}/content'
     r = requests.get(url, headers=headers)
+    return r.content
+
+def get_sticker_file(sticker_id: str, _type=str):
+    if _type == 'ANIMATION': url = f'https://stickershop.line-scdn.net/stickershop/v1/sticker/{sticker_id}/iPhone/sticker_animation@2x.png;compress=true'
+    else: url = f'https://stickershop.line-scdn.net/stickershop/v1/sticker/{sticker_id}/android/sticker.png;compress=true'
+    r = requests.get(url, headers=headers)
+    with open('sticker.gif', 'wb') as file:
+        file.write(r.content)
     return r.content

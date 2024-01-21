@@ -1,10 +1,10 @@
 import flask
 import json
 from linebot import LineBotApi, WebhookHandler
-from linebot.models import TextMessage, FileMessage, ImageMessage, StickerMessage, MessageEvent, JoinEvent
+from linebot.models import TextMessage, FileMessage, ImageMessage, StickerMessage, MessageEvent, VideoMessage, JoinEvent
 from linebot.exceptions import InvalidSignatureError
 
-from utils.Ltools import write_message_sdata, write_file_sdata, write_image_sdata, write_join_sdata
+from utils.Ltools import write_message_sdata, write_file_sdata, write_image_sdata, write_sticker_sdata, write_video_sdata, write_join_sdata
 
 with open('config.json', 'r') as file:
     config = json.load(file)
@@ -36,6 +36,10 @@ def callback():
 def handle_message(event):
     write_message_sdata(event)
 
+@handler.add(MessageEvent, message=StickerMessage)
+def handle_sticker(event):
+    write_sticker_sdata(event)
+
 @handler.add(MessageEvent, message=FileMessage)
 def handle_file(event):
     write_file_sdata(event)
@@ -43,6 +47,10 @@ def handle_file(event):
 @handler.add(MessageEvent, message=ImageMessage)
 def handle_image(event):
     write_image_sdata(event)
+
+@handler.add(MessageEvent, message=VideoMessage)
+def handle_video(event):
+    write_video_sdata(event)
 
 @handler.add(JoinEvent)
 def handle_join(event):
