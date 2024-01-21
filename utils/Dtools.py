@@ -2,6 +2,7 @@ import colorama
 import time
 import re
 import os
+import requests
 import json
 
 def auto_mkdir(*paths: str) -> None:
@@ -84,3 +85,5 @@ def split_str_to_list(text: str, size: int) -> list:
 
     return text_list
 
+def get_file(url: str):
+    return requests.get(url, headers={'user-agent': 'Mozilla/5.0'}).content
