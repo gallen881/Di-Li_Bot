@@ -13,6 +13,12 @@ with open('config.json', 'r') as file:
 with open('data.json', 'r') as file:
     data = json.load(file)
 
+FILE_TYPE_TABLE = {
+    'image': 'png',
+    'video': 'mp4',
+    'audio': 'mp3'
+}
+
 
 class FromLine(Cog_Extension):
     def __init__(self, *args, **kwargs):
@@ -54,6 +60,11 @@ class FromLine(Cog_Extension):
                         with open('data.json', 'w') as file:
                             json.dump(data, file, indent=4)
                         await self.send_file(switcher['video'], file_type='video')
+                    if data['last_timestamp']['audio'] != switcher['audio']['timestamp']:
+                        data['last_timestamp']['audio'] = switcher['audio']['timestamp']
+                        with open('data.json', 'w') as file:
+                            json.dump(data, file, indent=4)
+                        await self.send_file(switcher['audio'], file_type='audio')
                 except Exception as e:
                     print(e)
                     
@@ -124,10 +135,8 @@ class FromLine(Cog_Extension):
             f.seek(0)
             if file_type == 'file':   
                 await channel.send(msg, file=discord.File(f, filename=sdata['file_name']))
-            elif file_type == 'image':
-                await channel.send(msg, file=discord.File(f, filename='image.png'))
-            elif file_type == 'video':
-                await channel.send(msg, file=discord.File(f, filename='video.mp4'))
+            else:
+                await channel.send(msg, file=discord.File(f, filename=f'{file_type}.{FILE_TYPE_TABLE[file_type]}'))
 
     async def send_sticker(self, sdata: dict):
         channel, msg = self.get_channelmsg(sdata)

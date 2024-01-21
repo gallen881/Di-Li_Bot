@@ -65,7 +65,7 @@ def write_file_sdata(event: MessageEvent):
     with open('switcher.json', 'w', encoding='utf8') as file:
         json.dump(switcher, file, indent=4, ensure_ascii=False)
 
-def write_video_sdata(event: MessageEvent):
+def write_video_audio_sdata(event: MessageEvent):
     switch_data = {
         'type': event.message.type,
         'message_id': event.message.id,
@@ -75,7 +75,7 @@ def write_video_sdata(event: MessageEvent):
     }
     with open('switcher.json', 'r', encoding='utf8') as file:
         switcher = json.load(file)
-    switcher['video'] = switch_data
+    switcher[switch_data['type']] = switch_data
     with open('switcher.json', 'w', encoding='utf8') as file:
         json.dump(switcher, file, indent=4, ensure_ascii=False)
 
