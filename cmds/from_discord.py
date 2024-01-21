@@ -2,7 +2,7 @@ import json
 import discord
 from discord.ext import commands
 from linebot import LineBotApi
-from linebot.models import TextSendMessage, ImageSendMessage, SendMessage
+from linebot.models import TextSendMessage, ImageSendMessage, VideoSendMessage, SendMessage
 
 from core._cog import Cog_Extension
 
@@ -31,6 +31,8 @@ class FromDiscord(Cog_Extension):
             for attachment in msg.attachments:
                 if attachment.content_type.startswith('image'):
                     line_bot_api.push_message(group_id, ImageSendMessage(original_content_url=attachment.url, preview_image_url=attachment.url))
+                if attachment.content_type.startswith('video'):
+                    line_bot_api.push_message(group_id, VideoSendMessage(original_content_url=attachment.url, preview_image_url=attachment.url))
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(FromDiscord(bot))
