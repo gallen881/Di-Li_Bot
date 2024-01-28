@@ -29,6 +29,9 @@ data = {
         "message": 0,
         "file": 0,
         "image": 0,
+        "video": 0,
+        "audio": 0,
+        "sticker": 0,
         "join": 0
     },
     "user_table": {},
@@ -50,7 +53,16 @@ switcher = {
     },
     "image": {
         "timestamp": 0
-    }
+    },
+    "sticker": {
+        "timestamp": 0
+    },
+    "video": {
+        "timestamp": 0
+    },
+    "audio": {
+        "timestamp": 0
+    },
 }
 
 with open('switcher.json', 'w') as file:
