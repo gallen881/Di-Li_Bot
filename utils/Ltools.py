@@ -92,12 +92,12 @@ def write_image_sdata(event: MessageEvent):
     with open('switcher.json', 'w', encoding='utf8') as file:
         json.dump(switcher, file, indent=4, ensure_ascii=False)
         
-def get_group_summary(group_id: str) -> dict:
+def get_group_summary(group_id) -> dict:
     url = f'https://api.line.me/v2/bot/group/{group_id}/summary'
     r = requests.get(url, headers=headers).json()
     return r
 
-def get_user_profile(user_id: str) -> dict:
+def get_user_profile(user_id) -> dict:
     url = f'https://api.line.me/v2/bot/profile/{user_id}'
     r = requests.get(url, headers=headers).json()
     return r
