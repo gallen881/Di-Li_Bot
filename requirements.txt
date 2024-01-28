@@ -3,3 +3,4 @@ line-bot-sdk
 flask
 requests
 colorama
+pydub
