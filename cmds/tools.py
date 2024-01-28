@@ -30,13 +30,13 @@ class Tools(Cog_Extension):
             channel = self.bot.get_channel(channel_id)
             user_name = get_user_profile(user_id)['displayName']
             if channel.name != user_name:
-                ctx.send(f'Change {channel.name} to {user_name}')
+                await ctx.send(f'Change {channel.name} to {user_name}')
                 await channel.edit(name=user_name)
         for group_id, channel_id in data['group_table'].items():
             channel = self.bot.get_channel(channel_id)
             group_name = get_group_summary(group_id)['groupName']
             if channel.name != group_name:
-                ctx.send(f'Change {channel.name} to {group_name}')
+                await ctx.send(f'Change {channel.name} to {group_name}')
                 await channel.edit(name=group_name)
 
         await ctx.send('Update done.')
