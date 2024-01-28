@@ -62,7 +62,7 @@ switcher = {
     },
     "audio": {
         "timestamp": 0
-    },
+    }
 }
 
 with open('switcher.json', 'w') as file:
