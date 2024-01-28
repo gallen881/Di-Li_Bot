@@ -34,6 +34,11 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    if event.message.text == '-info':
+        with open('info.txt', 'r', encoding='utf8') as file:
+            info = file.read()
+        line_bot_api.reply_message(event.reply_token, TextMessage(text=info))
+        return
     write_message_sdata(event)
 
 @handler.add(MessageEvent, message=StickerMessage)

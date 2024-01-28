@@ -39,6 +39,12 @@ async def main():
         await ctx.send(f'Reloaded {extension} successfully')
         print_detail(memo='INFO', user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=f'{extension}.py reloaded successfully')
 
+    
+    @bot.command()
+    async def info(ctx: commands.Context):
+        with open('info.txt', 'r', encoding='utf8') as file:
+            await ctx.send(file.read())
+
     async with bot:
         for file in os.listdir('./cmds'):
             if file.endswith('.py'):
