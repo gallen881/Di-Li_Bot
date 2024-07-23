@@ -9,8 +9,8 @@ Use Discord to send and receive messages from Line
 | Stickers | ⭕ | ❌ |
 | Pictures | ⭕ | ⭕ |
 | Videos | ⭕ | ⭕ |
-| Audios | ⭕ | ❌ |
-| Files | ⭕ | ⭕ |
+| Audios | ⭕ | ⭕ |
+| Files | ⭕ | ❌ |
 
 ## How to use
 1. Create a Line bot(messaging API), and get the channel access token and channel secret.
