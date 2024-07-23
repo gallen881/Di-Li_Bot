@@ -6,6 +6,7 @@ Use Discord to send and receive messages from Line
 | Message type | Line to Discord | Discord to Line |
 |-|-|-|
 | Text | ⭕ | ⭕ |
+| Emoji | ⭕ | ⭕ |
 | Stickers | ⭕ | ❌ |
 | Pictures | ⭕ | ⭕ |
 | Videos | ⭕ | ⭕ |
