@@ -141,16 +141,14 @@ class FromLine(Cog_Extension):
 
     async def send_sticker(self, sdata: dict):
         channel, msg = self.get_channelmsg(sdata)
-        # sticker = json.loads(get_sticker_file(sdata['sticker_id'], sdata['type']))
-        sticker = get_sticker_file(sdata['sticker_id'], sdata['type'])
+        sticker = get_sticker_file(sdata['sticker_id'], sdata['type'], True)
         extension = 'gif' if sdata['type'] == 'ANIMATION' else 'png'
-        # with open(f'sticker.{extension}', 'wb') as file:
-        #     file.write(sticker)
         with BytesIO() as f:
             f.write(sticker)
             f.seek(0)
             f = discord.File(f, filename=f'sticker.{extension}')
-            embed = discord.Embed(title='Sticker').set_image(url=f'attachment://sticker.{extension}')
+            embed = discord.Embed(title='Sticker')
+            embed.set_image(url=f'attachment://sticker.{extension}')
             await channel.send(msg, file=f, embed=embed)
         
 

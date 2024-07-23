@@ -107,10 +107,11 @@ def get_message_file(message_id: str):
     r = requests.get(url, headers=headers)
     return r.content
 
-def get_sticker_file(sticker_id: str, _type=str):
-    if _type == 'ANIMATION': url = f'https://stickershop.line-scdn.net/stickershop/v1/sticker/{sticker_id}/iPhone/sticker_animation@2x.png;compress=true'
+def get_sticker_file(sticker_id: str, type_=str, save=False):
+    if type_ == 'ANIMATION': url = f'https://stickershop.line-scdn.net/stickershop/v1/sticker/{sticker_id}/iPhone/sticker_animation@2x.png;compress=true'
     else: url = f'https://stickershop.line-scdn.net/stickershop/v1/sticker/{sticker_id}/android/sticker.png;compress=true'
     r = requests.get(url, headers=headers)
-    with open('sticker.gif', 'wb') as file:
-        file.write(r.content)
+    if save:
+        with open(f"sticker.{'gif' if type_ == 'ANIMATION' else 'png'}", 'wb') as file:
+            file.write(r.content)
     return r.content
