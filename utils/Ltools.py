@@ -21,6 +21,11 @@ def get_user_profile(user_id) -> dict:
     r = requests.get(url, headers=headers).json()
     return r
 
+def get_user_profile_from_group(group_id, user_id) -> dict:
+    url = f'https://api.line.me/v2/bot/group/{group_id}/member/{user_id}'
+    r = requests.get(url, headers=headers).json()
+    return r
+
 def get_message_file(message_id: str):
     url = f'https://api-data.line.me/v2/bot/message/{message_id}/content'
     r = requests.get(url, headers=headers)

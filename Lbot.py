@@ -7,7 +7,7 @@ from discord import SyncWebhook
 from linebot import LineBotApi
 from linebot.models import TextMessage
 
-from utils.Ltools import get_user_profile, get_message_file, get_sticker_file, get_sticker_metadata
+from utils.Ltools import get_user_profile, get_message_file, get_sticker_file, get_sticker_metadata, get_user_profile_from_group
 
 with open('config.json', 'r') as file:
     config = json.load(file)
@@ -47,7 +47,8 @@ def callback():
             webhook.send(f'New {"group" if is_from_group else "user"}: {line_channel_id}', username='Logs', silent=True)
         discord_channel_id = str(data[f'{"group" if is_from_group else "user"}_table'].get(line_channel_id, 0))
         if discord_channel_id in data['webhook_table'].keys():
-            user_profile = get_user_profile(event['source']['userId'])
+            if is_from_group: user_profile = get_user_profile_from_group(event['source']['groupId'], event['source']['userId'])
+            else: user_profile = get_user_profile(event['source']['userId'])
             webhook = SyncWebhook.from_url(data['webhook_table'][discord_channel_id])
 
             message_type = event['message']['type']

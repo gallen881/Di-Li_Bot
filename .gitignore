@@ -1,6 +1,7 @@
 *pycache*
 
 temp/*
+test*
 
 config.json
 data.json
