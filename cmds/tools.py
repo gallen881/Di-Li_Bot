@@ -20,6 +20,15 @@ class Tools(Cog_Extension):
         assert guild == ctx.guild, 'Please use this command in the guild that you entered in the config file.'
         await guild.create_category(name='Groups')
         await guild.create_category(name='Users')
+        logs_category = await guild.create_category(name='Logs')
+        logs_channel = await logs_category.create_text_channel(name='Logs', topic='Logs channel, please DO NOT delete this channel.')
+        logs_webhook = await logs_channel.create_webhook(name='Logs')
+        await logs_webhook.send('Logs channel, please **DO NOT** delete this channel.', username='Logs')
+        with open('data.json', 'r') as file:
+            data = json.load(file)
+        data['logs_channel'] = {'id': logs_channel.id, 'webhook': logs_webhook.url}
+        with open('data.json', 'w') as file:
+            json.dump(data, file, indent=4)
         await ctx.send('Setup done.')
 
     @commands.command()

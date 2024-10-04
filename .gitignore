@@ -1,5 +1,7 @@
 *pycache*
 
+temp/*
+
 config.json
 data.json
 switcher.json

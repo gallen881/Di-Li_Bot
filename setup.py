@@ -25,45 +25,11 @@ with open('config.json', 'w') as file:
     json.dump(config, file, indent=4)
 
 data = {
-    "last_timestamp": {
-        "message": 0,
-        "file": 0,
-        "image": 0,
-        "video": 0,
-        "audio": 0,
-        "sticker": 0,
-        "join": 0
-    },
     "user_table": {},
-    "group_table": {}
+    "group_table": {},
+    "webhook_table": {},
+    "logs_channel": {}
 }
 
 with open('data.json', 'w') as file:
     json.dump(data, file, indent=4)
-
-switcher = {
-    "message": {
-        "timestamp": 0
-    },
-    "join": {
-        "timestamp": 0
-    },
-    "file": {
-        "timestamp": 0
-    },
-    "image": {
-        "timestamp": 0
-    },
-    "sticker": {
-        "timestamp": 0
-    },
-    "video": {
-        "timestamp": 0
-    },
-    "audio": {
-        "timestamp": 0
-    }
-}
-
-with open('switcher.json', 'w') as file:
-    json.dump(switcher, file, indent=4)
