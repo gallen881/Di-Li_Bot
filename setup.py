@@ -1,4 +1,5 @@
 import json
+import os
 
 line_assess_token = input('Enter your Line Bot channel assess token:\n')
 line_channel_secret = input('Enter your Line Bot channel secret:\n')
@@ -33,3 +34,5 @@ data = {
 
 with open('data.json', 'w') as file:
     json.dump(data, file, indent=4)
+
+os.mkdir('temp')
