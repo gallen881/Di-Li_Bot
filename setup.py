@@ -7,19 +7,29 @@ port = int(input('Enter your Line Bot webhook port:\n'))
 discord_token = input('Enter your Discord Bot token:\n')
 discord_prefix = input('Enter your Discord Bot prefix:\n')
 discord_guild_id = int(input('Enter your Discord guild id:\n'))
+certification = input('Have certification? (y/n)\n')
+if certification == 'y':
+    certification = [input('cert:\n'), input('key:\n')]
+else:
+    print('You can use ngrok instead of certification!!')
 
 config = {
     "LineBot": {
         "ACCESS_TOKEN": line_assess_token,
         "CHANNEL_SECRET": line_channel_secret,
         "host": "0.0.0.0",
-        "port": port
+        "port": port,
+        "certification": {
+            "cert": certification[0],
+            "key": certification[1]
+        }
     },
     "DiscordBot": {
         "token": discord_token,
         "prefix": discord_prefix,
         "guild_id": discord_guild_id
     }
+
 }
 
 with open('config.json', 'w') as file:

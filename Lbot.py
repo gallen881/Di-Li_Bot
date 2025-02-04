@@ -97,4 +97,10 @@ def callback():
         return 'OK'
 
 if __name__ == "__main__":
-    app.run(host=config['LineBot']['host'], port=config['LineBot']['port'])
+    if config['LineBot']['certification']:
+        import ssl
+        ssl_context = ssl.SSLContext()
+        ssl_context.load_cert_chain(config['LineBot']['certification']['cert'], config['LineBot']['certification']['key'])
+        app.run(host=config['LineBot']['host'], port=config['LineBot']['port'], ssl_context=ssl_context)
+    else:
+        app.run(host=config['LineBot']['host'], port=config['LineBot']['port'])
